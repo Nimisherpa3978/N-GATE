@@ -135,31 +135,33 @@ $user_name = $_SESSION["user_name"];
 
             <div class="card">
 
-                <h3>
-                    📋 Government Services
-                </h3>
+                <h2>Government Services</h2>
 
                 <p>
-                    Browse available government services
-                    and submit applications.
+                    Browse available digital government services
+                    and submit service requests.
                 </p>
 
-            </div>
+                <a class="btn" href="services.php">
+                    View Services
+                </a>
 
+            </div>
 
             <div class="card">
 
-                <h3>
-                    📊 Request Tracking
-                </h3>
+                <h2>Request Tracking</h2>
 
                 <p>
-                    Monitor the status of your submitted
-                    government service requests.
+                    Track the status of your submitted government
+                    service requests.
                 </p>
 
-            </div>
+                <a class="btn" href="requests.php">
+                    My Requests
+                </a>
 
+            </div>
 
             <div class="card">
 
