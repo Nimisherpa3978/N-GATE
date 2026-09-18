@@ -43,11 +43,11 @@ require_once "config/database.php";
             </li>
 
             <li>
-                <a href="login.php">Login</a>
+                <a href="/N-GATE/auth/login.php">Login</a>
             </li>
 
             <li>
-                <a href="register.php">Register</a>
+                <a href="/N-GATE/auth/register.php">Register</a>
             </li>
 
         </ul>
@@ -82,7 +82,7 @@ require_once "config/database.php";
                     Explore Services
                 </a>
 
-                <a href="login.php" class="btn btn-secondary">
+                <a href="/N-GATE/auth/login.php" class="btn btn-secondary">
                     Citizen Login
                 </a>
 

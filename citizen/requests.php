@@ -1,20 +1,22 @@
+
 <?php
 
 session_start();
 
 require_once "../config/database.php";
 
+/* Check login */
 if (!isset($_SESSION["user_id"])) {
     header("Location: ../auth/login.php");
     exit;
 }
 
+/* Check citizen role */
 if ($_SESSION["user_role"] !== "citizen") {
     die("Access denied.");
 }
 
 $success = isset($_GET["success"]);
-
 
 /* Get citizen requests */
 
@@ -29,21 +31,16 @@ $stmt = $conn->prepare("
         government_agencies.agency_name,
         consents.consent_status
     FROM service_requests
-
     INNER JOIN government_services
         ON service_requests.service_id =
            government_services.id
-
     INNER JOIN government_agencies
         ON government_services.agency_id =
            government_agencies.id
-
     LEFT JOIN consents
         ON service_requests.id =
            consents.request_id
-
     WHERE service_requests.citizen_id = ?
-
     ORDER BY service_requests.id DESC
 ");
 
@@ -57,7 +54,6 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,15 +61,21 @@ $result = $stmt->get_result();
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>N-GATE - My Requests</title>
 
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <link
+        rel="stylesheet"
+        href="../assets/css/style.css">
 
 </head>
 
 <body>
+
+    <!-- Navigation -->
 
     <nav class="navbar">
 
@@ -83,20 +85,32 @@ $result = $stmt->get_result();
 
         <div class="nav-links">
 
-            <a href="../index.php">Home</a>
+            <a href="../index.php">
+                Home
+            </a>
 
-            <a href="dashboard.php">Dashboard</a>
+            <a href="dashboard.php">
+                Dashboard
+            </a>
 
-            <a href="services.php">Services</a>
+            <a href="services.php">
+                Services
+            </a>
 
-            <a href="requests.php">My Requests</a>
+            <a href="requests.php">
+                My Requests
+            </a>
 
-            <a href="../auth/logout.php">Logout</a>
+            <a href="../auth/logout.php">
+                Logout
+            </a>
 
         </div>
 
     </nav>
 
+
+    <!-- Main Section -->
 
     <section class="section">
 
@@ -107,7 +121,7 @@ $result = $stmt->get_result();
 
         <?php if ($success): ?>
 
-            <p style="color:green;">
+            <p style="color: green;">
 
                 Service request submitted successfully.
 
@@ -118,7 +132,7 @@ $result = $stmt->get_result();
 
         <?php if ($result->num_rows > 0): ?>
 
-            <div style="overflow-x:auto;">
+            <div style="overflow-x: auto;">
 
                 <table
                     border="1"
@@ -130,17 +144,33 @@ $result = $stmt->get_result();
 
                         <tr>
 
-                            <th>Request Number</th>
+                            <th>
+                                Request Number
+                            </th>
 
-                            <th>Service</th>
+                            <th>
+                                Service
+                            </th>
 
-                            <th>Agency</th>
+                            <th>
+                                Agency
+                            </th>
 
-                            <th>Status</th>
+                            <th>
+                                Status
+                            </th>
 
-                            <th>Consent</th>
+                            <th>
+                                Consent
+                            </th>
 
-                            <th>Date</th>
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Action
+                            </th>
 
                         </tr>
 
@@ -153,52 +183,106 @@ $result = $stmt->get_result();
 
                             <tr>
 
+                                <!-- Request Number -->
+
                                 <td>
+
                                     <?php
+
                                     echo htmlspecialchars(
                                         $request["request_number"]
                                     );
+
                                     ?>
+
                                 </td>
 
+
+                                <!-- Service -->
+
                                 <td>
+
                                     <?php
+
                                     echo htmlspecialchars(
                                         $request["service_name"]
                                     );
+
                                     ?>
+
                                 </td>
 
+
+                                <!-- Agency -->
+
                                 <td>
+
                                     <?php
+
                                     echo htmlspecialchars(
                                         $request["agency_name"]
                                     );
+
                                     ?>
+
                                 </td>
 
+
+                                <!-- Status -->
+
                                 <td>
+
                                     <?php
+
                                     echo htmlspecialchars(
                                         $request["status"]
                                     );
+
                                     ?>
+
                                 </td>
 
+
+                                <!-- Consent -->
+
                                 <td>
+
                                     <?php
+
                                     echo htmlspecialchars(
                                         $request["consent_status"]
                                     );
+
                                     ?>
+
                                 </td>
 
+
+                                <!-- Date -->
+
                                 <td>
+
                                     <?php
+
                                     echo htmlspecialchars(
                                         $request["created_at"]
                                     );
+
                                     ?>
+
+                                </td>
+
+
+                                <!-- Track Action -->
+
+                                <td>
+
+                                    <a
+                                        class="btn"
+                                        href="request-status.php?id=<?php echo (int)$request["id"]; ?>">
+                                        Track
+                                    </a>
+
                                 </td>
 
                             </tr>
@@ -211,7 +295,11 @@ $result = $stmt->get_result();
 
             </div>
 
+
         <?php else: ?>
+
+
+            <!-- No Requests -->
 
             <div class="card">
 
@@ -227,20 +315,26 @@ $result = $stmt->get_result();
                 <a
                     class="btn"
                     href="services.php">
+
                     Explore Services
+
                 </a>
 
             </div>
+
 
         <?php endif; ?>
 
     </section>
 
 
+    <!-- Footer -->
+
     <footer class="footer">
 
         <p>
-            N-GATE — Academic E-Governance Project | B.Sc. CSIT
+            N-GATE — Academic E-Governance Project |
+            B.Sc. CSIT
         </p>
 
     </footer>

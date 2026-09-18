@@ -1,54 +1,64 @@
+
 <?php
+
+error_reporting(E_ALL);
+ini_set("display_errors", 1);
 
 session_start();
 
 require_once "../config/database.php";
 
 
-/* Check login */
+/* ==============================
+   Check Login
+============================== */
 
 if (!isset($_SESSION["user_id"])) {
+
     header("Location: ../auth/login.php");
+
     exit;
 }
 
 
-/* Check agency role */
+/* ==============================
+   Check Citizen Role
+============================== */
 
-if ($_SESSION["user_role"] !== "agency") {
+if ($_SESSION["user_role"] !== "citizen") {
+
     die("Access denied.");
 }
 
 
-/* Check request ID */
+/* ==============================
+   Check Request ID
+============================== */
 
 if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) {
+
     die("Invalid request ID.");
 }
 
 $request_id = intval($_GET["id"]);
 
+$user_id = $_SESSION["user_id"];
 
-/* Get request details */
+
+/* ==============================
+   Get Request Information
+============================== */
 
 $sql = "
     SELECT
         service_requests.id,
         service_requests.request_number,
+        service_requests.description,
         service_requests.status,
         service_requests.created_at,
-
-        users.full_name AS citizen_name,
-        users.email AS citizen_email,
-
         government_services.service_name,
-
         government_agencies.agency_name
-
     FROM service_requests
-
-    INNER JOIN users
-        ON service_requests.citizen_id = users.id
 
     INNER JOIN government_services
         ON service_requests.service_id =
@@ -59,27 +69,38 @@ $sql = "
            government_agencies.id
 
     WHERE service_requests.id = ?
+    AND service_requests.citizen_id = ?
 ";
 
 
 $stmt = $conn->prepare($sql);
 
-$stmt->bind_param("i", $request_id);
+$stmt->bind_param(
+    "ii",
+    $request_id,
+    $user_id
+);
 
 $stmt->execute();
 
 $result = $stmt->get_result();
 
 
-/* Check request exists */
+/* ==============================
+   Check Request
+============================== */
 
 if ($result->num_rows === 0) {
-    die("Service request not found.");
+
+    die("Request not found or access denied.");
 }
 
-
 $request = $result->fetch_assoc();
-/* Get status history */
+
+
+/* ==============================
+   Get Status History
+============================== */
 
 $history_sql = "
     SELECT
@@ -87,7 +108,6 @@ $history_sql = "
         request_status_logs.new_status,
         request_status_logs.changed_at,
         users.full_name AS changed_by_name
-
     FROM request_status_logs
 
     INNER JOIN users
@@ -95,8 +115,9 @@ $history_sql = "
 
     WHERE request_status_logs.request_id = ?
 
-    ORDER BY request_status_logs.id DESC
+    ORDER BY request_status_logs.id ASC
 ";
+
 
 $history_stmt = $conn->prepare($history_sql);
 
@@ -123,7 +144,9 @@ $history_result = $history_stmt->get_result();
         name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-    <title>N-GATE - Request Details</title>
+    <title>
+        N-GATE | Track Request
+    </title>
 
     <link
         rel="stylesheet"
@@ -135,10 +158,12 @@ $history_result = $history_stmt->get_result();
 <body>
 
 
+    <!-- Navigation -->
+
     <nav class="navbar">
 
         <div class="logo">
-            N-GATE Agency
+            N-GATE
         </div>
 
         <div class="nav-links">
@@ -151,8 +176,12 @@ $history_result = $history_stmt->get_result();
                 Dashboard
             </a>
 
+            <a href="services.php">
+                Services
+            </a>
+
             <a href="requests.php">
-                Requests
+                My Requests
             </a>
 
             <a href="../auth/logout.php">
@@ -164,17 +193,21 @@ $history_result = $history_stmt->get_result();
     </nav>
 
 
+    <!-- Main Section -->
+
     <section class="section">
 
         <h1>
-            Service Request Details
+            Track Service Request
         </h1>
 
         <p>
-            Review the submitted citizen service request
-            before processing it.
+            View the current processing status and
+            history of your government service request.
         </p>
 
+
+        <!-- Request Information -->
 
         <div class="card">
 
@@ -184,93 +217,102 @@ $history_result = $history_stmt->get_result();
 
 
             <p>
-                <strong>Request Number:</strong>
+
+                <strong>
+                    Request Number:
+                </strong>
 
                 <?php
+
                 echo htmlspecialchars(
                     $request["request_number"]
                 );
+
                 ?>
 
             </p>
 
 
             <p>
-                <strong>Service:</strong>
+
+                <strong>
+                    Service:
+                </strong>
 
                 <?php
+
                 echo htmlspecialchars(
                     $request["service_name"]
                 );
+
                 ?>
 
             </p>
 
 
             <p>
-                <strong>Agency:</strong>
+
+                <strong>
+                    Agency:
+                </strong>
 
                 <?php
+
                 echo htmlspecialchars(
                     $request["agency_name"]
                 );
+
                 ?>
 
             </p>
 
 
             <p>
-                <strong>Status:</strong>
+
+                <strong>
+                    Description:
+                </strong>
 
                 <?php
+
                 echo htmlspecialchars(
-                    $request["status"]
+                    $request["description"]
                 );
+
                 ?>
 
             </p>
 
 
             <p>
-                <strong>Submitted At:</strong>
+
+                <strong>
+                    Submitted:
+                </strong>
 
                 <?php
+
                 echo htmlspecialchars(
                     $request["created_at"]
                 );
+
                 ?>
 
             </p>
 
-        </div>
-
-
-        <div class="card">
-
-            <h2>
-                Citizen Information
-            </h2>
-
 
             <p>
-                <strong>Full Name:</strong>
+
+                <strong>
+                    Current Status:
+                </strong>
 
                 <?php
+
                 echo htmlspecialchars(
-                    $request["citizen_name"]
+                    $request["status"]
                 );
-                ?>
 
-            </p>
-
-
-            <p>
-                <strong>Email:</strong>
-
-                <?php
-                echo htmlspecialchars(
-                    $request["citizen_email"]
-                );
                 ?>
 
             </p>
@@ -278,37 +320,14 @@ $history_result = $history_stmt->get_result();
         </div>
 
 
-        <div class="card">
+        <!-- Status History -->
 
-            <h2>
-                Agency Action
-            </h2>
-
-            <p>
-                The agency can process this request
-                by updating its status.
-            </p>
-
-
-            <a
-                class="btn"
-                href="update-status.php?id=<?php echo $request["id"]; ?>">
-                Update Request Status
-            </a>
-
-
-            <a
-                class="btn"
-                href="requests.php">
-                Back to Requests
-            </a>
-
-        </div>
         <div class="card">
 
             <h2>
                 Status History
             </h2>
+
 
             <?php if ($history_result->num_rows > 0): ?>
 
@@ -324,17 +343,26 @@ $history_result = $history_stmt->get_result();
 
                             <tr>
 
-                                <th>Previous Status</th>
+                                <th>
+                                    Previous Status
+                                </th>
 
-                                <th>New Status</th>
+                                <th>
+                                    New Status
+                                </th>
 
-                                <th>Changed By</th>
+                                <th>
+                                    Updated By
+                                </th>
 
-                                <th>Changed At</th>
+                                <th>
+                                    Date & Time
+                                </th>
 
                             </tr>
 
                         </thead>
+
 
                         <tbody>
 
@@ -343,35 +371,54 @@ $history_result = $history_stmt->get_result();
                                 <tr>
 
                                     <td>
+
                                         <?php
+
                                         echo htmlspecialchars(
                                             $history["old_status"]
                                         );
+
                                         ?>
+
                                     </td>
 
+
                                     <td>
+
                                         <?php
+
                                         echo htmlspecialchars(
                                             $history["new_status"]
                                         );
+
                                         ?>
+
                                     </td>
 
+
                                     <td>
+
                                         <?php
+
                                         echo htmlspecialchars(
                                             $history["changed_by_name"]
                                         );
+
                                         ?>
+
                                     </td>
 
+
                                     <td>
+
                                         <?php
+
                                         echo htmlspecialchars(
                                             $history["changed_at"]
                                         );
+
                                         ?>
+
                                     </td>
 
                                 </tr>
@@ -384,6 +431,7 @@ $history_result = $history_stmt->get_result();
 
                 </div>
 
+
             <?php else: ?>
 
                 <p>
@@ -395,14 +443,29 @@ $history_result = $history_stmt->get_result();
         </div>
 
 
+        <!-- Back Button -->
+
+        <div class="card">
+
+            <a
+                class="btn"
+                href="requests.php">
+
+                Back to My Requests
+
+            </a>
+
+        </div>
+
     </section>
 
+
+    <!-- Footer -->
 
     <footer class="footer">
 
         <p>
-            N-GATE — Academic E-Governance Project |
-            B.Sc. CSIT
+            N-GATE — Nepal Government Access & Trusted Exchange
         </p>
 
     </footer>
