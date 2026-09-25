@@ -1,15 +1,14 @@
 N-GATE 🇳🇵
 
-N-GATE (Nepal Government Access & Trusted Exchange) is a web-based e-governance service request and tracking system built as a B.Sc. CSIT semester project.
+N-GATE (Nepal Government Access & Trusted Exchange) is a web-based e-governance service request and tracking system developed as a B.Sc. CSIT semester project.
 
-The project is designed around a simple idea: citizens should be able to access government services, submit requests, and track their progress from one place. Government agencies can manage and process those requests, while administrators can manage the overall system.
+The idea behind N-GATE is simple: citizens can access government services, submit service requests, and track their progress from one place. Government agencies can review and process those requests, while administrators can manage users, agencies, services, and other system information.
 
+✨ Features
 
-✨ What can you do with N-GATE?
+👤 Citizen registration and login
 
-👤 Create and manage citizen accounts
-
-🔐 Login with role-based access
+🔐 Role-based authentication and access control
 
 🏛️ Browse available government services
 
@@ -17,16 +16,27 @@ The project is designed around a simple idea: citizens should be able to access 
 
 📌 Track request status and history
 
-🏢 Allow agencies to review and process requests
+🏢 Agency-side request management
 
 🔄 Update request statuses
 
-📋 Keep an audit history of status changes
+📋 Maintain an audit history of status changes
 
-👨‍💼 Manage users, agencies, and services through an admin dashboard
+👨‍💼 Admin dashboard for managing users, agencies, and services
 
+🗃️ CRUD Operations
 
-🛠️ Built With
+CRUD operations are used throughout the system to manage application data:
+
+Create — Add users, agencies, services, and service requests
+
+Read — View users, services, agencies, and requests
+
+Update — Update user, service, agency, and request information where applicable
+
+Delete — Remove records where applicable
+
+🛠️ Tech Stack
 
 PHP — Backend
 
@@ -40,20 +50,50 @@ Apache / XAMPP — Local development environment
 
 Git & GitHub — Version control
 
-
 👥 User Roles
-Citizen
+👤 Citizen
 
-Citizens can register, log in, view available services, submit requests, and track their requests.
+Citizens can:
 
-Government Agency
+Register and log in
 
-Agency users can view requests related to their services, review request details, and update request statuses.
+View available government services
 
-Administrator
+Submit service requests
 
-Admins can manage users, government agencies, services, and view overall system information.
+View submitted requests
 
+Track request status and history
+
+🏢 Government Agency
+
+Agency users can:
+
+Log in to the system
+
+View requests related to their services
+
+Review request details
+
+Process requests
+
+Update request statuses
+
+View request history
+
+👨‍💼 Administrator
+
+Administrators can:
+
+Access the admin dashboard
+
+Manage users
+
+Manage government agencies
+
+Manage government services
+
+View system information and request statistics
 
 🔄 Request Flow
 Citizen
@@ -76,7 +116,6 @@ A request can move through statuses such as:
 Pending → Processing → Approved → Completed
                     ↘ Rejected
 
-
 🔐 Security
 
 The project includes basic security mechanisms such as:
@@ -95,14 +134,12 @@ Prepared SQL statements
 
 Request status audit logging
 
-
 🎓 About the Project
 
-N-GATE was developed as a B.Sc. CSIT semester project to gain practical experience in web application development, database design, authentication, authorization, and e-governance concepts.
+N-GATE was developed as a B.Sc. CSIT semester project to gain practical experience in web application development, database design, authentication, authorization, CRUD operations, and e-governance concepts.
 
-The project is mainly focused on demonstrating how a centralized system could be used to organize government service requests and provide better visibility into their processing.
+The project demonstrates how a centralized system can be used to organize government service requests and provide citizens with better visibility into the processing of their requests.
 
-Note: N-GATE is an academic prototype and is not an official Government of Nepal platform. The government agencies and services included in the project are used for demonstration purposes.
+Note: N-GATE is an academic prototype and is not an official Government of Nepal platform. The government agencies and services included in the project are used for demonstration purposes only.
 
-
-⭐ If you find this project useful or interesting, feel free to explore the repository.
+⭐ Thanks for checking out N-GATE!
