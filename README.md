@@ -4,6 +4,7 @@ N-GATE (Nepal Government Access & Trusted Exchange) is a web-based e-governance 
 
 The project is designed around a simple idea: citizens should be able to access government services, submit requests, and track their progress from one place. Government agencies can manage and process those requests, while administrators can manage the overall system.
 
+
 ✨ What can you do with N-GATE?
 
 👤 Create and manage citizen accounts
@@ -24,6 +25,7 @@ The project is designed around a simple idea: citizens should be able to access 
 
 👨‍💼 Manage users, agencies, and services through an admin dashboard
 
+
 🛠️ Built With
 
 PHP — Backend
@@ -38,6 +40,7 @@ Apache / XAMPP — Local development environment
 
 Git & GitHub — Version control
 
+
 👥 User Roles
 Citizen
 
@@ -50,6 +53,7 @@ Agency users can view requests related to their services, review request details
 Administrator
 
 Admins can manage users, government agencies, services, and view overall system information.
+
 
 🔄 Request Flow
 Citizen
@@ -72,6 +76,7 @@ A request can move through statuses such as:
 Pending → Processing → Approved → Completed
                     ↘ Rejected
 
+
 🔐 Security
 
 The project includes basic security mechanisms such as:
@@ -90,6 +95,7 @@ Prepared SQL statements
 
 Request status audit logging
 
+
 🎓 About the Project
 
 N-GATE was developed as a B.Sc. CSIT semester project to gain practical experience in web application development, database design, authentication, authorization, and e-governance concepts.
@@ -97,5 +103,6 @@ N-GATE was developed as a B.Sc. CSIT semester project to gain practical experien
 The project is mainly focused on demonstrating how a centralized system could be used to organize government service requests and provide better visibility into their processing.
 
 Note: N-GATE is an academic prototype and is not an official Government of Nepal platform. The government agencies and services included in the project are used for demonstration purposes.
+
 
 ⭐ If you find this project useful or interesting, feel free to explore the repository.
