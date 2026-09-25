@@ -140,6 +140,5 @@ N-GATE was developed as a B.Sc. CSIT semester project to gain practical experien
 
 The project demonstrates how a centralized system can be used to organize government service requests and provide citizens with better visibility into the processing of their requests.
 
-Note: N-GATE is an academic prototype and is not an official Government of Nepal platform. The government agencies and services included in the project are used for demonstration purposes only.
 
 ⭐ Thanks for checking out N-GATE!
